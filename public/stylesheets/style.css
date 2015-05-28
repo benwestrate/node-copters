@@ -6,3 +6,17 @@ body {
 a {
   color: #00B7FF;
 }
+
+.kill{
+    background : red;
+    position: absolute;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    left: 0;
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+    font-weight: bolder;
+    font-size: 2em;
+}

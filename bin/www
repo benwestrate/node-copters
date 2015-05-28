@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('node-copters:server');
-var http = require('http');
+var app     = require('../app');
+var debug   = require('debug')('node-copters:server');
+var http    = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +19,14 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server          = http.createServer(app);
+var io              = require('socket.io')(server);
+var socketRoutes    = require("../routes/socketRoutes");
+
+io.on('connection', function (socket) {
+    console.log( "socket!" )
+    socketRoutes( socket );
+});
 
 /**
  * Listen on provided port, on all network interfaces.
