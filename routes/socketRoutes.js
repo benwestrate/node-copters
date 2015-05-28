@@ -1,55 +1,55 @@
-
-var arDrone         = require('ar-drone');
+var arDrone = require('ar-drone');
 
 var client = arDrone.createClient();
 
 client.config({
   'control:altitude_max': 1000
 });
+var stop = function() {
+  client.after(1000, function()) {
+    this.stop();
+  });
+};
 
 
-module.exports = function( socket ){
+module.exports = function(socket) {
 
-    socket.on( "Right" , function( data ){
-        client.right(.1);
-        client.after(1000, function(){
-          this.stop();
-        });
-        console.log( "Right" );
+  socket.on("Right", function(data) {
+    client.right(.1);
+    stop();
+    console.log("Right");
 
-    } )
-    socket.on( "Left" , function( data ){
-      client.left(.1);
-      client.after(1000, function(){
-        this.stop();
-      });
-        console.log( "Left" );
+  })
+  socket.on("Left", function(data) {
+    client.left(.1);
+    stop();
+    console.log("Left");
 
-    } )
-    socket.on( "TakeOff" , function( data ){
-        client.takeoff();
-        console.log( "taking off now" );
+  })
+  socket.on("TakeOff", function(data) {
+    client.takeoff();
+    stop();
+    console.log("taking off now");
 
-    } )
-    socket.on( "Down" , function( data ){
-      client.land();
-      client.after(1000, function(){
-        this.stop();
-      });
+  })
+  socket.on("Down", function(data) {
+    client.land();
+    stop();
 
-        console.log( "Down" );
+    console.log("Down");
 
-    } )
-    socket.on( "Long up" , function( data ){
+  })
+  socket.on("Forward", function(data) {
+    client.front(.1);
+    stop();
+    console.log("Long up");
 
-        console.log( "Long up" );
+  })
+  socket.on("Backward", function(data) {
+    client.clockwise(.5);
+    stop();
+    console.log("Up");
 
-    } )
-    socket.on( "Up" , function( data ){
-
-        console.log( "Up" );
-
-    } )
-
+  })
 
 }
