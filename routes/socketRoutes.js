@@ -7,7 +7,6 @@ client.config({
   'control:altitude_max': 1000
 });
 
-client.takeoff();
 
 module.exports = function( socket ){
 
@@ -27,7 +26,7 @@ module.exports = function( socket ){
         console.log( "Left" );
 
     } )
-    socket.on( "Take Off" , function( data ){
+    socket.on( "TakeOff" , function( data ){
         client.takeoff();
         console.log( "taking off now" );
 

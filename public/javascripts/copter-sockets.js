@@ -42,8 +42,8 @@ function filterCommand ( command ){
 
     if( commandList[commandList.length - 1] == "Down" && commandList[commandList.length - 2] == "Up" && commandList[commandList.length - 3] == "Down" ){
 
-        socket.emit( "Take Off" );
-        showMessage( "Take Off" );
+        socket.emit( "TakeOff" );
+        showMessage( "TakeOff" );
         sent = true;
 
     }
