@@ -6,7 +6,7 @@ client.config({
   'control:altitude_max': 1000
 });
 var stop = function() {
-  client.after(1000, function()) {
+  client.after(1000, function() {
     this.stop();
   });
 };
