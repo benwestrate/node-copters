@@ -2,18 +2,6 @@ var socket = io.connect('http://localhost:3000');
 
 gest.options.sensitivity( 85 );
 
-var messageContainer = document.createElement('div');
-messageContainer.className = 'gest-message';
-document.body.appendChild(messageContainer);
-
-var styles = {
-    positioning: 'margin: 22% auto; min-width: 100px; max-width: 400px; width: 80%; padding: 15px;',
-    copy: 'font: normal 35px/1.1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #fff; font-size: 45px; text-align: center;',
-    general: 'display: block; background-color: #000; z-index: 100; border-radius: 10px;'
-},
-    messageContainerStyle = styles.positioning + styles.copy + styles.general;
-
-
 
 gest.options.subscribeWithCallback(function(gesture) {
     if (gesture.direction) {
@@ -22,7 +10,7 @@ gest.options.subscribeWithCallback(function(gesture) {
 });
 gest.start();
 
-
+var commandList = [];
 var sent = false;
 
 function filterCommand ( command ){
@@ -35,60 +23,60 @@ function filterCommand ( command ){
         command = "Up";
     }
 
-    //commandList.push( command );
-    console.log(command);
-    socket.emit( command );
+    commandList.push( command );
 
-    // if( commandList[0] == "Left" && commandList[1] == "Right" && commandList[2] == "Left" ){
-    //
-    //     socket.emit( "Forward" );
-    //     showMessage( "Forward" );
-    //     sent = true;
-    // }
-    //
-    // if( commandList[0] == "Right" && commandList[1] == "Left" && commandList[2] == "Right" ){
-    //
-    //     socket.emit( "Backward" );
-    //     showMessage( "Backward" );
-    //     sent = true;
-    //
-    // }
-    //
-    // if( commandList[0] == "Down" && commandList[1] == "Up" && commandList[2] == "Down" ){
-    //
-    //     socket.emit( "Land" );
-    //     showMessage( "Land" );
-    //     sent = true;
-    //
-    // }
-    //
-    // if( !sent ){
-    //
-    //     socket.emit( commandList[0] );
-    //     showMessage( commandList[0] );
-    //
-    //     if( commandList.length == 3 ){
-    //         commandList = [];
-    //     }
-    //
-    // }
-    //
-    // if( commandList.length == 0 ){
-    //
-    //     sent == false;
-    //
-    // }
-    //
-    // if( commandList.length >= 3 ){
-    //     console.log(commandList);
-    //     commandList = [];
-    // }
+    if( commandList[commandList.length - 1] == "Left" && commandList[commandList.length - 2] == "Right" && commandList[commandList.length - 3] == "Left" ){
+
+        socket.emit( "Forward" );
+        showMessage( "Forward" );
+        sent = true;
+    }
+
+    if( commandList[commandList.length - 1] == "Right" && commandList[commandList.length - 2] == "Left" && commandList[commandList.length - 3] == "Right" ){
+
+        socket.emit( "Backward" );
+        showMessage( "Backward" );
+        sent = true;
+
+    }
+
+    if( commandList[commandList.length - 1] == "Down" && commandList[commandList.length - 2] == "Up" && commandList[commandList.length - 3] == "Down" ){
+
+        socket.emit( "Take Off" );
+        showMessage( "Take Off" );
+        sent = true;
+
+    }
+
+
+    if( !sent ){
+
+        socket.emit( command );
+        showMessage( command );
+
+    } else {
+
+        sent = false;
+
+    }
 
 
 }
 
+var messageContainer = document.createElement('div');
+messageContainer.className = 'gest-message';
+document.body.appendChild(messageContainer);
+
+var styles = {
+    positioning: 'margin: 22% auto; min-width: 100px; max-width: 400px; width: 80%; padding: 15px;',
+    copy: 'font: normal 35px/1.1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #fff; font-size: 45px; text-align: center;',
+    general: 'display: block; background-color: #000; z-index: 100; border-radius: 10px;'
+},
+    messageContainerStyle = styles.positioning + styles.copy + styles.general;
 
 function showMessage(message) {
+
+
 
     messageContainer.innerHTML = '<p style=\"margin:0\">' + message + '</p>';
     messageContainer.setAttribute('style', messageContainerStyle);
@@ -98,6 +86,10 @@ function showMessage(message) {
     }, 3000);
 
 }
+
+var landButton = document.querySelector(".kill");
+
+landButton.addEventListener( "click", function(e){ socket.emit( "Down" ); socket.emit( "Down" ); socket.emit( "Down" ); } )
 
 // Move Forward = Left Right Left
 // Move Backward = Right Left Right
